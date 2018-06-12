@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.http.MediaType;
 
 /**
  * @author tangxinyi@Ctrip.com
@@ -43,7 +44,7 @@ public class UserController {
    * 以SSE形式多次返回数据
    * @return
    */
-  @GetMapping(value = "/stream/all", produces = "text/event-stream")
+  @GetMapping(value = "/stream/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public Flux<User> streamGetAll(){
     return userRepository.findAll();
   }
@@ -133,7 +134,7 @@ public class UserController {
    * @param end
    * @return
    */
-  @GetMapping(value = "stream/age/{start}/{end}", produces = "text/event-stream")
+  @GetMapping(value = "stream/age/{start}/{end}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public Flux<User> streamFindByAge(@PathVariable("start")int start, @PathVariable("end") int end)
   {
     return this.userRepository.findByAgeBetween(start, end);

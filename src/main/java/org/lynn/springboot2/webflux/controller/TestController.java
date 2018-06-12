@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.http.MediaType;
 
 /**
  * @author tangxinyi@Ctrip.com
@@ -17,7 +18,7 @@ public class TestController {
     return Mono.just("Lynn");
   }
 
-  @GetMapping(value = "/age", produces = "text/event-stream")
+  @GetMapping(value = "/age", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public Flux<Integer> getAge(){
     return Flux.fromStream(IntStream.range(1, 18).mapToObj(i -> i));
   }
