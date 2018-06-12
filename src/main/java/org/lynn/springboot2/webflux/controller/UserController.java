@@ -1,7 +1,9 @@
 package org.lynn.springboot2.webflux.controller;
 
+import javax.validation.Valid;
 import org.lynn.springboot2.webflux.domain.User;
 import org.lynn.springboot2.webflux.repository.UserRepository;
+import org.lynn.springboot2.webflux.util.CheckUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,10 +54,11 @@ public class UserController {
    * @return
    */
   @PostMapping("/")
-  public Mono<User> createUser(@RequestBody User user){
+  public Mono<User> createUser(@Valid @RequestBody User user){
     // spring data jpa里面，新增和修改都是save， 有id是修改， id为空是新增
     // 根据实际情况是否置空id
     user.setId(null);
+    CheckUtil.checkName(user.getName());
     return this.userRepository.save(user);
   }
 
@@ -84,7 +87,8 @@ public class UserController {
    * @return
    */
   @PutMapping("/{id}")
-  public Mono<ResponseEntity<User>> updateUser(@PathVariable("id") String id, @RequestBody User user){
+  public Mono<ResponseEntity<User>> updateUser(@PathVariable("id") String id, @Valid @RequestBody User user){
+    CheckUtil.checkName(user.getName());
     return this.userRepository.findById(id)
         // flatMap操作数据
         .flatMap(user1 -> {
